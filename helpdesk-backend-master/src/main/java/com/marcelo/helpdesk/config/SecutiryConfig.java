@@ -52,9 +52,9 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 		http.cors().configurationSource(corsConfigurationSource()).and()
         .csrf(csrf -> csrf.disable());
 
-		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthenticationFilter(authenticationManagerBean((), jwtUtil));
 		
-		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil,userDetailsService));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManagerBean((), jwtUtil,userDetailsService));
 		
 		http.authorizeRequests(
 				requests -> requests.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated());
@@ -88,6 +88,12 @@ CorsConfigurationSource corsConfigurationSource() {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 }
