@@ -44,24 +44,24 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-            http.headers(
-            		headers -> headers.frameOptions().disable());
+		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+			http.headers(headers -> headers.frameOptions().disable());
 		}
 
 		http.cors().configurationSource(corsConfigurationSource()).and()
-        .csrf(csrf -> csrf.disable());
+			.csrf().disable();
 
 		http.addFilter(new JWTAuthenticationFilter(authenticationManagerBean(), jwtUtil));
-		
-		http.addFilter(new JWTAuthorizationFilter(authenticationManagerBean(), jwtUtil,userDetailsService));
-		
-		http.authorizeRequests(
-				requests -> requests.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated());
-		
-		http.sessionManagement( 
-				management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManagerBean(), jwtUtil, userDetailsService));
+
+		http.authorizeRequests()
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			.anyRequest().authenticated();
+
+		http.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
+
 	
 	
 	@Override
