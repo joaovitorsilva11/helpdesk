@@ -29,7 +29,7 @@ import com.marcelo.helpdesk.secutiry.JWTUtil;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**","/login" };
+	private static final String[] PUBLIC_MATCHERS = {"/login" };
 	
 	@Autowired
 	private Environment env;
@@ -70,19 +70,29 @@ public class SecutiryConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of(
-			"https://helpdesk-deploy.vercel.app"
-		));
-		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
+CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of(
+        "https://helpdesk-deploy.vercel.app",
+        "https://helpdesk-techbridge.vercel.app"
+    ));
+    configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true);
+    
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+}
 	 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 }
